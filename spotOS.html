@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spotOS</title>
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+        body {
+            font-family: 'SF Pro Display', sans-serif;
+            background-image: url('https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/bg.jpg');
+            background-size: cover; 
+            transition: background-image 0.4s ease-in-out;
+            border: none; 
+        }
+
+        #clock {
+            font-size: 180px;
+            color: white;
+            font-family: 'SF Pro Display', sans-serif;
+            font-weight: px;
+            text-align: center;
+        }
+
+        #date {
+            font-size: 30px;
+            color: white;
+            font-family: 'SF Pro Display', sans-serif;
+            font-weight: ;
+            text-align: center;
+        }
+
+        #vertical-line {
+            position: fixed;
+            top: 0;
+            left: 1px;
+            width: 250px;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 9;
+            outline: none;
+            opacity: 0;
+        }
+
+        #popup {
+            position: fixed;
+            top: 10px;
+            left: 5px;
+            width: 250px;
+            height: 580px;
+            border-radius: 20px;
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+            z-index: 9998;
+            background: rgba(32, 32, 32, 0.30);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(13.7px);
+            -webkit-backdrop-filter: blur(13.7px);
+        }
+
+        #popup.active {
+            transform: translateX(0);
+        }
+
+        .clockdiv {
+            position: absolute;
+            top: 30px;
+            left: 790px;
+            display: table;
+            min-width: 200px;
+            z-index: 9;
+            background-color: #f1f1f1;
+            text-align: center;
+            border: 1px solid #d3d3d3;
+            cursor: move;
+        }
+
+ .wetdiv {
+            position: absolute;
+            top: 350px;
+            left: 790px;
+            display: table;
+            min-width: 200px;
+            z-index: 9;
+            background-color: #f1f1f1;
+            text-align: center;
+            border: 1px solid #d3d3d3;
+            cursor: move;
+        }
+
+
+        #dayOfWeek {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-weight: bold;
+            color: #F7232D;
+        }
+
+        #dayOfMonth {
+            position: absolute;
+            top: 27px;
+            left: 20px;
+            font-size: 50px;
+            color: white;
+        }
+
+        .popup2 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1A1A1A;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s;
+            border-radius: 20px;
+            width: 500px;
+            height: 500px;
+            border: none;
+        }
+
+        .overlay2 {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+ .popup3 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1A1A1A;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s;
+            border-radius: 20px;
+            width: 500px;
+            height: 500px;
+            border: none;
+        }
+
+        .overlay3 {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+
+
+        h1 {
+            position: fixed;
+            top: -20px;
+            left: 20px;
+            color: white;
+            font-size: 50px;
+        }
+
+        .image-button {
+            width: 150px;
+            height: 100px;
+            cursor: pointer;
+            margin-right: 10px;
+            border-radius: 10px;
+            border: none;
+        }
+
+        h2 {
+            color: white;
+        }
+
+        h3 {
+            color: gray;
+        }
+
+        .image {
+            height: 20px;
+            width: 250px;
+        }
+
+        open {
+            width: 1px; 
+            height: 1px;
+        }
+.image-app {
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 10px;
+    border: none;
+    background: n
+}
+
+ #charging-image {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+ .popup4 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1A1A1A;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s;
+            border-radius: 20px;
+            width: 500px;
+            height: 500px;
+            border: none;
+        }
+
+        .overlay4 {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+
+ .popup5 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1A1A1A;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s;
+            border-radius: 20px;
+            width: 500px;
+            height: 500px;
+            border: none;
+        }
+
+        .overlay5 {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+ .popup6 {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1A1A1A;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.2s;
+            border-radius: 20px;
+            width: 500px;
+            height: 500px;
+            border: none;
+        }
+
+        .overlay6 {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+.settings
+{
+position: relative; 
+top: 70px; 
+width: 500px; 
+height: 80px;
+ border-radius: 15px;
+z-index: 9998;
+background: #383838;
+border: none;
+color:white;
+text-size:50px;
+
+}
+  .text-inside {
+        position: absolute; /* Make the text position absolute */
+        top: 40px; /* Position the text vertically in the middle */
+        left: 60px; /* Position the text horizontally in the middle */
+        transform: translate(-50%, -50%); /* Center the text */
+font-size: 30px;
+font-family: 'SF Pro Display', sans-serif;
+
+    }
+ .close {
+        position: absolute; /* Position the close button */
+        top: 25px; /* Distance from top */
+        right: 20px; /* Distance from right */
+        cursor: pointer; /* Cursor style */
+color: #2562FA;
+font-size: 30px; 
+    }
+ .close2 {
+        position: absolute; /* Position the close button */
+        top: 25px; /* Distance from top */
+        right: 20px; /* Distance from right */
+        cursor: pointer; /* Cursor style */
+color: #2562FA;
+font-size: 30px; 
+    }
+
+ .close3 {
+        position: absolute; /* Position the close button */
+        top: 25px; /* Distance from top */
+        right: 20px; /* Distance from right */
+        cursor: pointer; /* Cursor style */
+color: #2562FA;
+font-size: 30px; 
+    }
+
+.erase {
+        display: inline-block;
+        padding: 10px 20px; /* Adjust padding as needed */
+        background-color: transparent;
+text-decoration: none;
+        color: #2562FA;
+font-size: 30px;
+            }
+    </style>
+</head>
+<body>
+    <br>
+
+    <div id="date"></div>
+    <div id="clock"></div>
+
+
+    <div id="vertical-line"></div>
+     <OL><OL><OL>
+</OL>
+
+    <div id="popup">
+        <OL><h2>ㅤApp Library</h2></OL>
+   
+            <OL><img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/sett.jpg" alt="Popup Button" id="openBtn" class="image-app">
+</OL>
+     <OL><img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/walp.jpg" alt="Popup Button" id="openBtn3" class="image-app">       
+     
+    </div>
+
+    <div style="background: rgba(45, 45, 45, 0.50); height: 200px; border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    border: none;" class="clockdiv">
+        <p style="font-family: 'SF Pro Display', sans-serif; color: white; font-size: 23px; position: relative;
+        top: 5px; left: 25px;"></p>
+        <p style="font-family: 'SF Pro Display', sans-serif; color: white; font-size: 45px; position: relative;
+        top: -120px; left: -35px;"></p>
+        <p style="font-family: 'SF Pro Display', sans-serif; color: white; font-size: 14px; position: relative;
+        top: -175px; left: -30px;"></p>
+      <img style="height: 50px; width: 50px;position: relative; left: -50px; top: -25px;" src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/unnamed.png" alt="Device"</img>
+<p style="color: white; font-size: 50px; position: absolute; left: 30px; top: 70px;"id="battery-level"> </p>
+<img style="position: absolute; height: 50px; width: 50px; top: 23px;"id="charging-image" src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/3.png" alt="Charging Image">
+
+    </div>
+
+  <div style="background: rgba(45, 45, 45, 0.50); height: 200px; border-radius: 20px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    border: none;" class="wetdiv">
+<div id="weather-info"></div>
+
+</div>
+
+
+    <div class="overlay2" id="overlay2"></div>
+    <div class="popup2" id="popup2">
+        <h1>Settings</h1>
+<button id="openBtn4" class="settings">
+  <span class="text-inside">General</span>
+<br>
+<button style="position: relative; top: 80px; left: 1px; " id="openBtn5" class="settings">
+  <span class="text-inside">‎‎‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎  ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎Software Update</span>
+<button style="position: relative; top: 90px; left: 1px; " id="openBtn6" class="settings">
+  <span class="text-inside">‎‎‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎Transfer or Reset</span>
+
+
+          </div>
+
+   <div class="overlay3" id="overlay3"></div>
+    <div class="popup3" id="popup3">
+     
+        <h1>Wallpapers</h1>
+<BR>
+<BR>
+<BR>
+
+ <h2>Dynamic</h2>
+‎ ‎ ‎ ‎ ‎<img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/bg.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/bg.jpg">
+        <img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/lala.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/lala.jpg">
+<img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/mnt.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/mnt.jpg">
+        
+        <br><BR>
+<BR>
+‎ ‎ ‎ ‎ <img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/bop.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/bop.jpg">
+        <img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/15.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/15.jpg">
+        <img src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/lol.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/lol.jpg">
+        <h2>Always on Display</h2>
+<h3>disable backgrounds</h3>
+<h3>to preserve battery life.</h3>
+<h>battery life.</h3>
+<img style="position: relative; top: -130px; left: 185px; width: 200px; height: 110px;" src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/tree.jpg" class="image-button" data-src="https://raw.githubusercontent.com/ca1ebb/spotOS-1.0/main/tree.jpg">
+
+        <br>
+       </div>
+    </div>
+
+<div class="overlay4" id="overlay4"></div>
+    <div class="popup4" id="popup4">
+     
+        <h1>General</h1>
+  <span class="close" onclick="closePopup()">Back</span> <!-- Close button -->
+<BR>
+<br>
+<BR>
+<BR>
+<h2>spotOS Version</h2>
+<h3>1.0</h3>
+<BR>
+<BR>
+<h2>Model Number</h2>
+<h3>HS1875P</h3>
+<BR>
+<BR>
+<h2>Serial Number</h2>
+<h3>18361937183629173</h3>
+
+
+
+        <br>
+       </div>
+    </div>
+<div class="overlay5" id="overlay5"></div>
+    <div class="popup5" id="popup5">
+     
+        <h1>Software Update</h1>
+<span class="close2" onclick="closePopup2()">Back</span> <!-- Close button -->
+
+<h3 style="position: relative; top: 45%; left:25%;">Your HomeSpot is up to date</h3>
+
+       </div>
+    </div>
+
+<div class="overlay6" id="overlay6"></div>
+    <div class="popup6" id="popup6">
+     
+        <h1>Transfer or Reset</h1>
+<span class="close3" onclick="closePopup3()">Back</span> <!-- Close button -->
+<BR>
+<BR>
+<BR>
+<ol><h2>ㅤㅤPrepare for a new HomeSpot</h2></ol>
+
+<ol><h3>Erasing all content and settings will erase this HomeSpot and all data will be removed. This  ㅤㅤㅤㅤㅤㅤㅤㅤㅤaction can not be undone.</h3> 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<a href="https://www.example.com" class="erase">Erase all Content and Settings</a>
+       </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var ampm = hours >= 12 ? '' : '';
+            
+            // Convert hours from military time to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // Handle midnight (0 hours)
+
+            // Convert single digit hours/minutes to double digit format (e.g., 9 -> 09)
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+
+            var timeString = hours + ":" + minutes + " " + ampm;
+            document.getElementById('clock').innerHTML = timeString;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        function updateDate() {
+            var now = new Date();
+            var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var day = days[now.getDay()];
+            var month = months[now.getMonth()];
+            var dayNumber = now.getDate();
+
+            var dateString = day + ", " + month + " " + dayNumber;
+            document.getElementById('date').innerHTML = dateString;
+        }
+
+        setInterval(updateDate, 1000);
+        updateDate();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var verticalLine = document.getElementById('vertical-line');
+            var popup = document.getElementById('popup');
+
+            function togglePopup() {
+                popup.classList.toggle('active');
+            }
+
+            verticalLine.addEventListener('click', togglePopup);
+
+            var initialX = null;
+            var threshold = 50;
+
+            verticalLine.addEventListener('touchstart', function(event) {
+                initialX = event.touches[0].clientX;
+            });
+
+            verticalLine.addEventListener('touchend', function(event) {
+                if (initialX !== null) {
+                    var deltaX = event.changedTouches[0].clientX - initialX;
+                    if (Math.abs(deltaX) > threshold) {
+                        togglePopup();
+                    }
+                    initialX = null;
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!popup.contains(event.target) && event.target !== verticalLine) {
+                    popup.classList.remove('active');
+                }
+            });
+
+            verticalLine.addEventListener('click', function(event) {
+                event.stopPropagation();
+            });
+        });
+
+       const openBtn = document.getElementById('openBtn');
+const popup = document.getElementById('popup2');
+const overlay = document.getElementById('overlay2');
+const imageButtons = document.querySelectorAll('.image-button');
+
+openBtn.addEventListener('click', function() {
+    popup.style.display = 'block';
+    overlay.style.display = 'block';
+    setTimeout(function() {
+        popup.style.opacity = '1';
+        overlay.style.opacity = '1';
+    }, 10);
+});
+
+// For the third popup
+const openBtn3 = document.getElementById('openBtn3');
+const popup3 = document.getElementById('popup3');
+const overlay3 = document.getElementById('overlay3');
+
+openBtn3.addEventListener('click', function() {
+    popup3.style.display = 'block';
+    overlay3.style.display = 'block';
+    setTimeout(function() {
+        popup3.style.opacity = '1';
+        overlay3.style.opacity = '1';
+    }, 10);
+});
+// For the third popup
+const openBtn4 = document.getElementById('openBtn4');
+const popup4 = document.getElementById('popup4');
+const overlay4 = document.getElementById('overlay4');
+
+openBtn4.addEventListener('click', function() {
+    popup4.style.display = 'block';
+    overlay4.style.display = 'block';
+    setTimeout(function() {
+        popup4.style.opacity = '1';
+        overlay4.style.opacity = '1';
+    }, 10);
+});
+// For the third popup
+const openBtn5 = document.getElementById('openBtn5');
+const popup5 = document.getElementById('popup5');
+const overlay5 = document.getElementById('overlay5');
+
+openBtn5.addEventListener('click', function() {
+    popup5.style.display = 'block';
+    overlay5.style.display = 'block';
+    setTimeout(function() {
+        popup5.style.opacity = '1';
+        overlay5.style.opacity = '1';
+    }, 10);
+});
+
+// For the third popup
+const openBtn6 = document.getElementById('openBtn6');
+const popup6 = document.getElementById('popup6');
+const overlay6 = document.getElementById('overlay6');
+
+openBtn6.addEventListener('click', function() {
+    popup6.style.display = 'block';
+    overlay6.style.display = 'block';
+    setTimeout(function() {
+        popup6.style.opacity = '1';
+        overlay6.style.opacity = '1';
+    }, 10);
+});
+
+
+        overlay.addEventListener('click', function(e) {
+            popup.style.opacity = '0';
+            overlay.style.opacity = '0';
+            setTimeout(function() {
+                popup.style.display = 'none';
+                overlay.style.display = 'none';
+            }, 500);
+        });
+ 
+overlay3.addEventListener('click', function(e) {
+            popup3.style.opacity = '0';
+            overlay3.style.opacity = '0';
+            setTimeout(function() {
+                popup3.style.display = 'none';
+                overlay3.style.display = 'none';
+            }, 500);
+        });
+overlay4.addEventListener('click', function(e) {
+            popup4.style.opacity = '0';
+            overlay4.style.opacity = '0';
+            setTimeout(function() {
+                popup4.style.display = 'none';
+                overlay4.style.display = 'none';
+            }, 500);
+        });
+overlay5.addEventListener('click', function(e) {
+            popup5.style.opacity = '0';
+            overlay5.style.opacity = '0';
+            setTimeout(function() {
+                popup5.style.display = 'none';
+                overlay5.style.display = 'none';
+            }, 500);
+        });
+  
+overlay6.addEventListener('click', function(e) {
+            popup6.style.opacity = '0';
+            overlay6.style.opacity = '0';
+            setTimeout(function() {
+                popup6.style.display = 'none';
+                overlay6.style.display = 'none';
+            }, 500);
+        });
+
+   function openPopup() {
+        document.getElementById("popup4").style.display = "block";
+        document.getElementById("overlay4").style.display = "block";
+    }
+
+    // Function to close the popup
+    function closePopup() {
+        document.getElementById("popup4").style.display = "none";
+        document.getElementById("overlay4").style.display = "none";
+    }
+
+    // Function to prevent closing the popup when clicking on it
+    document.getElementById("popup4").onclick = function(event) {
+        event.stopPropagation();
+  
+        };
+
+
+  function openPopup() {
+        document.getElementById("popup5").style.display = "block";
+        document.getElementById("overlay5").style.display = "block";
+    }
+
+    // Function to close the popup
+    function closePopup2() {
+        document.getElementById("popup5").style.display = "none";
+        document.getElementById("overlay5").style.display = "none";
+    }
+
+    // Function to prevent closing the popup when clicking on it
+    document.getElementById("popup5").onclick = function(event) {
+        event.stopPropagation();
+    };
+
+
+
+  function openPopup() {
+        document.getElementById("popup6").style.display = "block";
+        document.getElementById("overlay6").style.display = "block";
+    }
+
+    // Function to close the popup
+    function closePopup3() {
+        document.getElementById("popup6").style.display = "none";
+        document.getElementById("overlay6").style.display = "none";
+    }
+
+    // Function to prevent closing the popup when clicking on it
+    document.getElementById("popup6").onclick = function(event) {
+        event.stopPropagation();
+    };
+
+
+
+        imageButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const imageUrl = button.getAttribute('data-src');
+                document.body.style.backgroundImage = `url(${imageUrl})`;
+            });
+        });
+function updateBatteryInfo() {
+  if ('getBattery' in navigator) {
+    navigator.getBattery().then(function(battery) {
+      var level = battery.level * 100;
+      document.getElementById('battery-level').innerText = "" + level.toFixed(0) + "%";
+      
+      var chargingImage = document.getElementById('charging-image');
+      if (battery.charging) {
+        chargingImage.style.opacity = '1';
+      } else {
+        chargingImage.style.opacity = '0';
+      }
+    });
+  } else {
+    document.getElementById('battery-level').innerText = "N/A";
+  }
+}
+
+// Update battery info initially
+updateBatteryInfo();
+
+// Update battery info every second
+setInterval(updateBatteryInfo, 1000);
+
+
+// Function to convert temperature from Celsius to Fahrenheit
+function celsiusToFahrenheit(celsius) {
+    return ((celsius * 9/5) + 32).toFixed(0);
+}
+
+// Function to fetch weather data based on user's location
+function fetchWeatherByLocation(latitude, longitude) {
+    fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=82fa76cb845688a2ac534e3cd1333144`)
+    .then(response => response.json())
+    .then(data => {
+        const location = data.name;
+        // Convert temperature to Fahrenheit
+        const temperatureCelsius = data.main.temp;
+        const temperatureFahrenheit = celsiusToFahrenheit(temperatureCelsius);
+        // Process weather data and display it
+        const weatherInfo = `
+            <h2 style="font-size: 20px; position: relative; top: 5px; left: -15px;">${location}</h2>
+            <p style="color: white; font-size: 60px; position: absolute; top: -10px; left: 15px;">${temperatureFahrenheit}°</p>
+            <p style="color: white; font-size: 20px; position: relative; top: 100px; left: -40px;">${data.weather[0].description}</p>
+        `;
+        document.getElementById('weather-info').innerHTML = weatherInfo;
+    })
+    .catch(error => {
+        console.error('Error fetching weather data:', error);
+    });
+}
+
+// Function to handle geolocation success
+function geoSuccess(position) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    fetchWeatherByLocation(latitude, longitude);
+}
+
+// Function to handle geolocation error
+function geoError(error) {
+    console.error('Error getting geolocation:', error.message);
+}
+
+// Check if geolocation is supported by the browser
+if ('geolocation' in navigator) {
+    // Request geolocation
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+} else {
+    console.error('Geolocation is not supported by this browser.');
+}
+
+    </script>
+</body>
+</html>
